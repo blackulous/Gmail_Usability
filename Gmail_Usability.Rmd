@@ -1,0 +1,101 @@
+---
+title: "Gmail_Study"
+author: "Patience Heath"
+date: "2025-09-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+```
+
+# Gmail Usability Testing Graphs 
+
+```{r dataframe, echo = FALSE}
+#0 means struggled in task 1 means completed task with ease
+#0 is no and 1 is yes 
+
+gmail_data = data.frame(participants = c("Dajah", "Chris", "Darius", "Nate"),
+                  stars_features = c(0,0,0,0),
+                  save_changes = c(0,0,0,1),
+                  learn_more_preference = c("centered pop-up", "centered pop-up", "seperate tab", "side panel"),
+                  like_vacation_responder = c(1,1,1,0),
+                  desktop_notifications = c(1,1,1,1),
+                  layout_changes = c(1,1,1,0))
+
+gmail_data = gmail_data %>% mutate(across(c(stars_features, save_changes, like_vacation_responder, desktop_notifications, layout_changes), ~ as.factor(.x)))
+
+write.csv(gmail_data, "/Users/patienceheath/gmail_data.csv", row.names = FALSE)
+
+                  
+```
+
+### Save Changes Task Pie Chart 
+
+Participants that were able to complete a given task and save changes without being probed to do so.
+
+```{r barplot save changes task, echo = FALSE}
+
+gmail_data %>% count(save_changes) %>%
+  ggplot(aes(x = "", y = n, fill = save_changes)) + geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_void() +
+  labs(fill = "Completed Save Changes Task",
+       title = "Save Changes Task")
+```
+
+### Stars Features Task Pie Chart
+
+Participants were asked to explain what the stars features was according to the description provided in settings.
+
+```{r stars feature task, echo = FALSE}
+gmail_data %>% count(stars_features) %>% 
+  ggplot(aes(x = "", y = n, fill = stars_features)) + geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_void() +
+    labs(fill = "Completed Stars Task",
+         title = "Stars Feature Task")
+```
+
+### Desktop Notifications Task Pie Chart
+
+Participants were given a scenario where they would have to locate desktop notifications in Gmail.
+
+```{r desktop notifications, echo = FALSE}
+gmail_data %>% count(desktop_notifications) %>% 
+  ggplot(aes(x = "", y = n, fill = desktop_notifications)) + geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  theme_void() +
+    labs(fill = "Completed Desktop Notifications Task",
+         title = "Desktop Notifications Task")
+
+```
+
+### Desktop Notifications Task Pie Chart
+
+Participants were shown 3 different ways that gmail presents information after clicking *learn more*. They were asked which presentation method they preferred the most. 
+
+```{r learn more preference, echo = FALSE}
+
+
+gmail_data %>% ggplot(aes(x = learn_more_preference)) + geom_bar(fill = "salmon") +
+  labs(title = "Learn More Presentation Preferences",
+       x = "Learn More Preference")
+
+  
+```
+### Layout Changes 
+
+Participants that suggested that the layout needs to change after testing. 
+
+```{r layout changes, echo = FALSE}
+
+
+gmail_data %>% ggplot(aes(x = layout_changes)) + geom_bar(fill = "salmon") +
+  labs(title = "Participants Suggesting Layout Changes",
+       x = " Layout changes")
+
+```
+
